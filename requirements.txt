@@ -1,0 +1,4 @@
+paho-mqtt
+couchdb
+flask
+flask-httpauth
