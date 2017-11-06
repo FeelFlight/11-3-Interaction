@@ -4,6 +4,7 @@ ADD  requirements.txt requirements.txt
 RUN  pip install -r   requirements.txt
 
 ADD mcp.py    mcp.py
+ADD alarm.py  alarm.py
 ADD templates templates
 
 CMD ["python","-u","mcp.py"]
