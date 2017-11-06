@@ -80,6 +80,10 @@ def setHeating(id, heating):
     passenger['heating']['feet']  = min(heating[2], 100)
     db.save(passenger)
 
+    for i in passenger["assets"]["blanket"]:
+        mqclient.publish("blanket/%s/heat/0" % i, passenger['heating']['chest'])
+        mqclient.publish("blanket/%s/heat/1" % i, passenger['heating']['hip'])
+        mqclient.publish("blanket/%s/heat/2" % i, passenger['heating']['feet'])
 
 @app.route('/api/v1.0/alarm', methods=['GET', 'POST'])
 @auth.login_required
