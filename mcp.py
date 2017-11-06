@@ -52,7 +52,6 @@ def getUserByUserName(name):
                               "minute": "42",
                               "enabled": False}
         local.save(passenger)
-        print(json.dumps(passenger, indent=2, sort_keys=True))
         return passenger
 
 
@@ -63,8 +62,7 @@ def handle_alarm():
     passenger = getUserByUserName(auth.username())
 
     if request.method == 'GET':
-        a = {"hour": "23", "minute": "42", "enabled": True}
-        return make_response(jsonify(a), 200)
+        return make_response(jsonify(passenger['alarm']), 200)
     else:
         r = request.get_json(silent=True)
         if r is not None:
@@ -80,8 +78,10 @@ def handle_alarm():
 @auth.login_required
 def handle_heating():
 
+    passenger = getUserByUserName(auth.username())
+
     if request.method == 'GET':
-        a = [23, 42, 5]
+        a = [passenger['heating']['shoulder'], passenger['heating']['hips'], passenger['heating']['feed']]
         return make_response(jsonify(a), 200)
     else:
         r = request.get_json(silent=True)
