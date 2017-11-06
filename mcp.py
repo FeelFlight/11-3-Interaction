@@ -29,20 +29,40 @@ def hello():
     return render_template('hello.html')
 
 
-def getUserIdByName(name):
-    return "276371592"
+def getUserByUserName(name):
+
+    try:
+        local = localcouch['passenger']
+    except Exception as e:
+        local = localcouch.create('passenger')
+
+    remote = centralcouch['passenger']
+
+    id = "276371592"
+
+    if id in local:
+        return local[id]
+    else:
+        passenger = remote["276371592"]
+        passenger["heating"] = {"shoulder": 0,
+                                "hips": 0,
+                                "feed": 0
+                               }
+        passenger["alarm"] = {"hour": "23",
+                              "minute": "42",
+                              "enabled": False}
+        local.save(passenger)
+        print(json.dumps(passenger, indent=2, sort_keys=True))
+        return passenger
 
 
 @app.route('/api/v1.0/alarm', methods=['GET', 'POST'])
 @auth.login_required
 def handle_alarm():
 
-    userid = getUserIdByName(auth.username())
+    passenger = getUserByUserName(auth.username())
 
     if request.method == 'GET':
-        db = localcouch['blanket']
-
-
         a = {"hour": "23", "minute": "42", "enabled": True}
         return make_response(jsonify(a), 200)
     else:
@@ -76,3 +96,41 @@ def handle_heating():
 
 if __name__ == '__main__':
     app.run(host="::", port=8036)
+
+
+
+"""
+
+    def _check_for_alarm(self):
+        if time.time() - self._update_alarm_time > 1:
+            db = self._couch['blanket']
+
+            for b in db:
+                blanket = db[b]
+                if "alarm" in blanket:
+                    if "hour" in blanket['alarm'] and "minute" in blanket['alarm'] and "enabled" in blanket['alarm'] and blanket['alarm']['enabled'] is True:
+                        print("ALARM found:%s" % b)
+
+            self._update_alarm_time = time.time()
+
+    def _update_heating(self):
+        if time.time() - self._update_heating_time > 1:
+            db = self._couch['blanket']
+
+            for b in db:
+                blanket = db[b]
+                if "heating" in blanket:
+                    if "shoulder" in blanket['heating']:
+                        self._mqclient.publish("blanket/%s/heat/0" % b, blanket['heating']['shoulder'])
+                    if "hips" in blanket['heating']:
+                        self._mqclient.publish("blanket/%s/heat/1" % b, blanket['heating']['hips'])
+                    if "feed" in blanket['heating']:
+                        self._mqclient.publish("blanket/%s/heat/2" % b, blanket['heating']['feed'])
+
+            self._update_heating_time = time.time()
+
+    def _update_blouse(self):
+        if time.time() - self._update_blouse_time > 1:
+            self._update_blouse_time = time.time()
+
+"""
