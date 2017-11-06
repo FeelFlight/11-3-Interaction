@@ -55,6 +55,22 @@ def getUserByUserName(name):
         return passenger
 
 
+def setAlarm(id, alarm):
+    db = localcouch['passenger']
+    passenger = db[id]
+    passenger['alarm'] = alarm
+    db.save(passenger)
+
+
+def setHeating(id, heating):
+    db = localcouch['passenger']
+    passenger = db[id]
+    passenger['heating']['shoulder'] = min(heating[0], 100)
+    passenger['heating']['hips']     = min(heating[1], 100)
+    passenger['heating']['feed']     = min(heating[2], 100)
+    db.save(passenger)
+
+
 @app.route('/api/v1.0/alarm', methods=['GET', 'POST'])
 @auth.login_required
 def handle_alarm():
@@ -67,6 +83,7 @@ def handle_alarm():
         r = request.get_json(silent=True)
         if r is not None:
             if "hour" in r and "minute" in r and "enabled" in r:
+                setAlarm(passenger['_id'], r)
                 return make_response(jsonify({'ok': 'Troy and Abed in the morning'}), 200)
             else:
                 return make_response(jsonify({'error': 'wrong json object'}), 401)
@@ -87,6 +104,7 @@ def handle_heating():
         r = request.get_json(silent=True)
         if r is not None:
             if len(r) == 3:
+                setHeating(passenger['_id'], r)
                 return make_response(jsonify({'ok': 'Troy and Abed in the morning'}), 200)
             else:
                 return make_response(jsonify({'error': 'wrong json object'}), 401)
