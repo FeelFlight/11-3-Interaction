@@ -1,0 +1,188 @@
+body{
+  font-family: Helvetica, "Helvetica Neue", sans-serif;
+  font-size: 18px;
+  color: #333;
+  margin: 0;
+}
+
+h1{
+  font-family: Verdana, sans-serif;
+  letter-spacing: 0px;
+  color: #234;
+}
+
+.UserSelectNone{
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: default;
+}
+
+/* PAGE */
+
+.PageContainer {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 15px;
+  /* border: 1px solid; */
+}
+
+/* NOTIFICATION */
+
+.Notification{
+  width: 100%;
+  background: #faa;
+  padding: 15px;
+  margin: -15px;
+}
+
+
+/* ALARM */
+
+.AlarmPanel {
+}
+
+.AlarmPanel table {
+  width: 100%;
+  max-width: 400px;
+}
+
+.AlarmPanel table,td {
+  border-collapse: collapse;
+}
+
+.AlarmPanel select,span {
+  font-size: 36px;
+  text-align: right;
+  direction: rtl;
+}
+
+.AlarmPanel option {
+  font-size: 8px;
+  color: green;
+}
+
+.AlarmPanel td {
+  padding-right: 5px;
+  font-size: 32px;
+}
+
+.AlarmPanel td:last-of-type {
+  text-align: right;
+}
+
+.AlarmPanel .CheckboxSwitch{
+  margin-top: 5px;
+}
+
+/* HEATING */
+
+.HeatingPanel{
+  margin-top: 100px
+}
+
+.HeatingPanel table{
+  width: 100%;
+}
+
+.HeatingPanel table,td{
+  margin: 0;
+  padding: 0;
+  padding-bottom: 5px;
+  border-collapse: collapse;
+}
+
+.HeatingPanel__Button{
+  height: 20px;
+  background-color: #35a;
+  padding: 12px 15px;
+  margin: 5px 0;
+  text-align: center;
+  transition: background-color 0.2s;
+}
+
+.HeatingPanel td:nth-of-type(1){
+  padding-right: 20px;
+  font-weight: bold;
+}
+
+.HeatingPanel td:nth-of-type(2) div{
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+}
+
+.HeatingPanel td:nth-of-type(2) .HeatingPanel__ActiveButton{
+  color: #def !important;
+}
+
+.HeatingPanel td:nth-of-type(5) div{
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+
+
+
+
+/* CHECKBOX - see https://www.w3schools.com/howto/howto_css_switch.asp */
+/* The switch - the box around the slider */
+.CheckboxSwitch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.CheckboxSwitch input {display:none;}
+
+/* The slider */
+.CheckboxSlider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.CheckboxSlider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .CheckboxSlider {
+  background-color: #2196F3;
+}
+
+input:focus + .CheckboxSlider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .CheckboxSlider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.CheckboxSlider.CheckboxSlider__Round {
+  border-radius: 34px;
+}
+
+.CheckboxSlider.CheckboxSlider__Round:before {
+  border-radius: 50%;
+}
