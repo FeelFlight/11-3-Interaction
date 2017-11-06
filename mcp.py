@@ -3,14 +3,18 @@ import json
 import time
 import random
 import couchdb
-from   flask          import Flask, jsonify, make_response, request, render_template
-from   flask_httpauth import HTTPBasicAuth
-from   flask_cors     import CORS
+from   flask            import Flask, jsonify, make_response, request, render_template
+from   flask_httpauth   import HTTPBasicAuth
+from   flask_cors       import CORS
+import paho.mqtt.client as     mqtt
 
 app          = Flask(__name__)
 auth         = HTTPBasicAuth()
 localcouch   = couchdb.Server('http://%s:5984/' % os.environ.get("LOCAL_COUCHDB_SERVER",   "localhost"))
 centralcouch = couchdb.Server('http://%s:5984/' % os.environ.get("CENTRAL_COUCHDB_SERVER", "localhost"))
+mqclient     = mqtt.Client(clean_session=True)
+mqclient.connect(os.environ.get("MQTT_SERVER", "localhost"), 1883, 60)
+mqclient.loop_start()
 
 CORS(app)
 
@@ -40,19 +44,23 @@ def getUserByUserName(name):
 
     remote = centralcouch['passenger']
 
-    id = "276371592"
+    id = "276371592" # TODO: Query DB
 
     if id in local:
         return local[id]
     else:
-        passenger = remote["276371592"]
+        passenger = remote[id]
         passenger["heating"] = {"chest": 0,
                                 "hip": 0,
                                 "feet": 0
-                               }
+                                }
         passenger["alarm"] = {"hour": "23",
                               "minute": "42",
-                              "enabled": False}
+                              "enabled": False
+                              }
+        passenger["assets"] = {"blanket": ["B1000", "B2000"],
+                               "shoe": "nix"
+                               }
         local.save(passenger)
         return passenger
 
