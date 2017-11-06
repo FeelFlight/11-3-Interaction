@@ -68,7 +68,7 @@ postHeating heaters =
   in
       Http.request
         { method = "POST"
-        , headers = [(Http.header "Content-Type" "application/json")]
+        , headers = commonHeaders
         , url = rootUrl ++ "heating"
         , body = (Http.jsonBody <| Encode.object heatersToEncode)
         , expect = Http.expectJson heatingDecoder
