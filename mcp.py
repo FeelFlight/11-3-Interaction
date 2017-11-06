@@ -5,12 +5,14 @@ import random
 import couchdb
 from   flask          import Flask, jsonify, make_response, request, render_template
 from   flask_httpauth import HTTPBasicAuth
+from   flask_cors     import CORS
 
 app          = Flask(__name__)
 auth         = HTTPBasicAuth()
 localcouch   = couchdb.Server('http://%s:5984/' % os.environ.get("LOCAL_COUCHDB_SERVER",   "localhost"))
 centralcouch = couchdb.Server('http://%s:5984/' % os.environ.get("CENTRAL_COUCHDB_SERVER", "localhost"))
 
+CORS(app)
 
 @auth.get_password
 def get_password(username):
