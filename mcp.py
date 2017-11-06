@@ -89,8 +89,10 @@ def setHeating(id, heating):
 @auth.login_required
 def handle_alarm():
 
-    passenger = getUserByUserName(auth.username())
+    #print(request.headers)
+    #print(request.get_json(silent=True))
 
+    passenger = getUserByUserName(auth.username())
     if request.method == 'GET':
         return make_response(jsonify(passenger['alarm']), 200)
     else:
@@ -127,12 +129,17 @@ def handle_heating():
 
 
 if __name__ == '__main__':
+
+    try:
+        local = localcouch['passenger']
+    except Exception as e:
+        local = localcouch.create('passenger')
+
     app.run(host="::", port=8036)
 
 
 
 """
-
     def _check_for_alarm(self):
         if time.time() - self._update_alarm_time > 1:
             db = self._couch['blanket']
@@ -144,25 +151,4 @@ if __name__ == '__main__':
                         print("ALARM found:%s" % b)
 
             self._update_alarm_time = time.time()
-
-    def _update_heating(self):
-        if time.time() - self._update_heating_time > 1:
-            db = self._couch['blanket']
-
-            for b in db:
-                blanket = db[b]
-                if "heating" in blanket:
-                    if "shoulder" in blanket['heating']:
-                        self._mqclient.publish("blanket/%s/heat/0" % b, blanket['heating']['shoulder'])
-                    if "hips" in blanket['heating']:
-                        self._mqclient.publish("blanket/%s/heat/1" % b, blanket['heating']['hips'])
-                    if "feed" in blanket['heating']:
-                        self._mqclient.publish("blanket/%s/heat/2" % b, blanket['heating']['feed'])
-
-            self._update_heating_time = time.time()
-
-    def _update_blouse(self):
-        if time.time() - self._update_blouse_time > 1:
-            self._update_blouse_time = time.time()
-
 """
