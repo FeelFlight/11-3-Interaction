@@ -70,6 +70,10 @@ def setAlarm(id, alarm):
     passenger = db[id]
     passenger['alarm'] = alarm
     db.save(passenger)
+    for i in passenger["assets"]["blanket"]:
+        mqclient.publish("blanket/%s/vibrate" % i, 500)
+    passenger['alarm']['enabled'] = False
+    db.save(passenger)
 
 
 def setHeating(id, heating):
@@ -88,10 +92,6 @@ def setHeating(id, heating):
 @app.route('/api/v1.0/alarm', methods=['GET', 'POST'])
 @auth.login_required
 def handle_alarm():
-
-    #print(request.headers)
-    #print(request.get_json(silent=True))
-
     passenger = getUserByUserName(auth.username())
     if request.method == 'GET':
         return make_response(jsonify(passenger['alarm']), 200)
