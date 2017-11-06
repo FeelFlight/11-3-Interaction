@@ -56,18 +56,18 @@ postAlarm {alarmSettings} =
     |> Http.send GetAlarmFromServer
 
 
-getHeating : Model -> Cmd Msg
-getHeating model =
-  Http.request
-    { method = "GET"
-    , headers = commonHeaders
-    , url = rootUrl ++ "heating"
-    , body = Http.emptyBody
-    , expect = Http.expectJson heatingDecoder
-    , timeout = Nothing
-    , withCredentials = False
-    }
-  |> Http.send GetHeatingFromServer
+-- getHeating : Model -> Cmd Msg
+-- getHeating model =
+--   Http.request
+--     { method = "GET"
+--     , headers = commonHeaders
+--     , url = rootUrl ++ "heating"
+--     , body = Http.emptyBody
+--     , expect = Http.expectJson heatingDecoder
+--     , timeout = Nothing
+--     , withCredentials = False
+--     }
+--   |> Http.send GetHeatingFromServer
 
 
 alarmDecoder : Decoder AlarmSettings
@@ -75,17 +75,17 @@ alarmDecoder =
   Decode.map3 AlarmSettings (field "hour" string) (field "minute" string) (field "enabled" bool)
 
 
--- postHeating : List Int -> Http.Request (List Int)
--- postHeating heaters =
---   Http.request
---     { method = "POST"
---     , headers = [(Http.header "Content-Type" "application/json")]
---     , url = rootUrl ++ "heating"
---     , body = (Http.jsonBody <| Encode.object [("heating", (heaters |> List.map toString |> String.concat |> Encode.string)) ])
---     , expect = Http.expectJson heatingDecoder
---     , timeout = Nothing
---     , withCredentials = False
---     }
+postHeating : List Int -> Http.Request (List Int)
+postHeating heaters =
+  Http.request
+    { method = "POST"
+    , headers = [(Http.header "Content-Type" "application/json")]
+    , url = rootUrl ++ "heating"
+    , body = (Http.jsonBody <| Encode.object [("heating", (heaters |> List.map toString |> String.concat |> Encode.string)) ])
+    , expect = Http.expectJson heatingDecoder
+    , timeout = Nothing
+    , withCredentials = False
+    }
 
 
 heatingDecoder : Decoder (List Int)

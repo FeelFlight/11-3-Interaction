@@ -31,13 +31,15 @@ update action ({alarmSettings} as model) =
       ({ model | alarmSettings = alarmSettings |> log "alarmSettings__", errorMsg = Nothing }, Cmd.none)
 
     GetAlarmFromServer (Err error) ->
-      ({ model | errorMsg = Just "Could not read alarm" }, Cmd.none)
+      (model, Cmd.none)
+      -- ({ model | errorMsg = Just "Could not read alarm" }, Cmd.none)
 
     GetHeatingFromServer (Ok heaters) ->
       ({ model | heaters = heaters, errorMsg = Nothing |> log "heating__" }, Cmd.none)
 
     GetHeatingFromServer (Err error) ->
-      ({ model | errorMsg = Just "Could not read heating" }, Cmd.none)
+      (model, Cmd.none)
+      -- ({ model | errorMsg = Just "Could not read heating" }, Cmd.none)
 
 
 changeAlarm : Model -> AlarmSettings -> (Model, Cmd Msg)
