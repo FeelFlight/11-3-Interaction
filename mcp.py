@@ -23,32 +23,40 @@ def unauthorized():
     return make_response(jsonify({'error': 'Unauthorized access'}), 401)
 
 
-@app.route('/api/v1.0/alarm/', methods=['GET'])
+@app.route('/api/v1.0/alarm', methods=['GET', 'POST'])
 @auth.login_required
-def get_wakeup():
-    a = {"hour": "23", "minute": "42", "eabled": True}
-    return make_response(jsonify(a), 200)
+def handle_alarm():
+
+    if request.method == 'GET':
+        a = {"hour": "23", "minute": "42", "enabled": True}
+        return make_response(jsonify(a), 200)
+    else:
+        r = request.get_json(silent=True)
+        if r is not None:
+            if "hour" in r and "minute" in r and "enabled" in r:
+                return make_response(jsonify({'ok': 'Troy and Abed in the morning'}), 200)
+            else:
+                return make_response(jsonify({'error': 'wrong json object'}), 401)
+        else:
+            return make_response(jsonify({'error': 'not a json post'}), 401)
 
 
-@app.route('/api/v1.0/alarm/', methods=['POST'])
+@app.route('/api/v1.0/heating', methods=['GET', 'POST'])
 @auth.login_required
-def set_wakeup():
-    a = {"hour": "12", "minute": "21", "eabled": True}
-    return make_response(jsonify({'ok': 'Troy and Abed in the morning'}), 200)
+def handle_heating():
 
-
-@app.route('/api/v1.0/heating/', methods=['GET'])
-@auth.login_required
-def get_heating():
-    a = [23, 42, 5]
-    return make_response(jsonify(a), 200)
-
-
-@app.route('/api/v1.0/heating/', methods=['POST'])
-@auth.login_required
-def set_heating():
-    a = [0, 0, 0]
-    return make_response(jsonify({'ok': 'Troy and Abed in the morning'}), 200)
+    if request.method == 'GET':
+        a = [23, 42, 5]
+        return make_response(jsonify(a), 200)
+    else:
+        r = request.get_json(silent=True)
+        if r is not None:
+            if len(r) == 3:
+                return make_response(jsonify({'ok': 'Troy and Abed in the morning'}), 200)
+            else:
+                return make_response(jsonify({'error': 'wrong json object'}), 401)
+        else:
+            return make_response(jsonify({'error': 'not a json post'}), 401)
 
 
 if __name__ == '__main__':
