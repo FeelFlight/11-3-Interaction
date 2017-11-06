@@ -3,7 +3,7 @@ import json
 import time
 import random
 import couchdb
-from   flask          import Flask, jsonify, make_response, request
+from   flask          import Flask, jsonify, make_response, request, render_template
 from   flask_httpauth import HTTPBasicAuth
 
 app   = Flask(__name__)
@@ -21,6 +21,10 @@ def get_password(username):
 @auth.error_handler
 def unauthorized():
     return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+
+@app.route('/')
+def hello():
+    return render_template('hello.html')
 
 
 @app.route('/api/v1.0/alarm', methods=['GET', 'POST'])
