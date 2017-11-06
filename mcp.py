@@ -6,9 +6,10 @@ import couchdb
 from   flask          import Flask, jsonify, make_response, request, render_template
 from   flask_httpauth import HTTPBasicAuth
 
-app   = Flask(__name__)
-auth  = HTTPBasicAuth()
-couch = couchdb.Server('http://%s:5984/' % os.environ.get("COUCHDB_SERVER", "localhost"))
+app          = Flask(__name__)
+auth         = HTTPBasicAuth()
+localcouch   = couchdb.Server('http://%s:5984/' % os.environ.get("LOCAL_COUCHDB_SERVER",   "localhost"))
+centralcouch = couchdb.Server('http://%s:5984/' % os.environ.get("CENTRAL_COUCHDB_SERVER", "localhost"))
 
 
 @auth.get_password
@@ -22,16 +23,26 @@ def get_password(username):
 def unauthorized():
     return make_response(jsonify({'error': 'Unauthorized access'}), 401)
 
+
 @app.route('/')
 def hello():
     return render_template('hello.html')
+
+
+def getUserIdByName(name):
+    return "276371592"
 
 
 @app.route('/api/v1.0/alarm', methods=['GET', 'POST'])
 @auth.login_required
 def handle_alarm():
 
+    userid = getUserIdByName(auth.username())
+
     if request.method == 'GET':
+        db = localcouch['blanket']
+
+
         a = {"hour": "23", "minute": "42", "enabled": True}
         return make_response(jsonify(a), 200)
     else:
