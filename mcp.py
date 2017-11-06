@@ -79,9 +79,9 @@ def setAlarm(id, alarm):
 def setHeating(id, heating):
     db = localcouch['passenger']
     passenger = db[id]
-    passenger['heating']['chest'] = min(heating[0], 100)
-    passenger['heating']['hip']   = min(heating[1], 100)
-    passenger['heating']['feet']  = min(heating[2], 100)
+    passenger['heating']['chest'] = min(heating['chest'], 100)
+    passenger['heating']['hip']   = min(heating['hip']  , 100)
+    passenger['heating']['feet']  = min(heating['feet'] , 100)
     db.save(passenger)
 
     for i in passenger["assets"]["blanket"]:
