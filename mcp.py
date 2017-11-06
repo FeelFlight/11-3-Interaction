@@ -46,9 +46,9 @@ def getUserByUserName(name):
         return local[id]
     else:
         passenger = remote["276371592"]
-        passenger["heating"] = {"shoulder": 0,
-                                "hips": 0,
-                                "feed": 0
+        passenger["heating"] = {"chest": 0,
+                                "hip": 0,
+                                "feet": 0
                                }
         passenger["alarm"] = {"hour": "23",
                               "minute": "42",
@@ -67,9 +67,9 @@ def setAlarm(id, alarm):
 def setHeating(id, heating):
     db = localcouch['passenger']
     passenger = db[id]
-    passenger['heating']['shoulder'] = min(heating[0], 100)
-    passenger['heating']['hips']     = min(heating[1], 100)
-    passenger['heating']['feed']     = min(heating[2], 100)
+    passenger['heating']['chest'] = min(heating[0], 100)
+    passenger['heating']['hip']   = min(heating[1], 100)
+    passenger['heating']['feet']  = min(heating[2], 100)
     db.save(passenger)
 
 
@@ -100,7 +100,7 @@ def handle_heating():
     passenger = getUserByUserName(auth.username())
 
     if request.method == 'GET':
-        a = [passenger['heating']['shoulder'], passenger['heating']['hips'], passenger['heating']['feed']]
+        a = [passenger['heating']['chest'], passenger['heating']['hip'], passenger['heating']['feet']]
         return make_response(jsonify(a), 200)
     else:
         r = request.get_json(silent=True)
