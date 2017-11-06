@@ -83,7 +83,7 @@ renderHeaterRow model heaterIndex =
 renderHeaterButton : Model -> Int -> Int -> Html Msg
 renderHeaterButton model heaterIndex buttonIndex =
   let
-      isActive = (getHeaterSetting model heaterIndex) == buttonIndex
+      isActive = (getHeaterSetting model heaterIndex) == (heatValueForButton buttonIndex)
       label =
         case buttonIndex of
           0 -> "Off"
@@ -98,7 +98,7 @@ renderHeaterButton model heaterIndex buttonIndex =
           _ -> "#f84"
       theButton =
         div
-        [ onClick (ChangeHeater heaterIndex ((toFloat buttonIndex) * 33.4 |> floor |> log "heatvalue"))
+        [ onClick (ChangeHeater heaterIndex (heatValueForButton buttonIndex))
         , classList [ ("UserSelectNone", True), ("HeatingPanel__Button", True), ("HeatingPanel__ActiveButton", isActive) ]
         , style [ ("background-color", (if isActive then buttonColor else "#eee")) ] ]
         [ Html.text label]
@@ -128,3 +128,8 @@ renderNotification model =
 
     Just msg ->
       div [ class "Notification" ] [ Html.text msg ]
+
+
+heatValueForButton : Int -> Int
+heatValueForButton buttonIndex =
+  (toFloat buttonIndex) * 33.4 |> floor
