@@ -98,7 +98,7 @@ renderHeaterButton model heaterIndex buttonIndex =
           _ -> "#f84"
       theButton =
         div
-        [ onClick (ChangeHeater heaterIndex buttonIndex)
+        [ onClick (ChangeHeater heaterIndex ((toFloat buttonIndex) * 33.4 |> floor |> log "heatvalue"))
         , classList [ ("UserSelectNone", True), ("HeatingPanel__Button", True), ("HeatingPanel__ActiveButton", isActive) ]
         , style [ ("background-color", (if isActive then buttonColor else "#eee")) ] ]
         [ Html.text label]
