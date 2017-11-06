@@ -10,8 +10,7 @@ import Model exposing (..)
 import Subscription exposing (..)
 
 
--- rootUrl = "http://172.26.2.68:8036/api/v1.0/"
-rootUrl = "http://172.26.2.195:8036/api/v1.0/"
+rootUrl = "/api/v1.0/"
 username = "ansi"
 password = "test"
 
