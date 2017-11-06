@@ -1,7 +1,7 @@
 sudo: required
 services:
 - docker
-language: bash
+language: node_js
 script:
 - docker run --rm --privileged multiarch/qemu-user-static:register --reset
 - docker build -t ansi/feelflight-11-3-interaction:latest .
