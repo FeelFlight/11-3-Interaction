@@ -5,8 +5,11 @@ language: node_js
 before_script:
   - npm install -g elm
 script:
-- cd frontend && elm-package install -y
-- elm make --output target/elm.js src/**.elm
+- cd frontend
+- elm-package install -y
+- elm make --output ../static/elm.js src/**.elm
+- ls -al ../static/
+- cd ..
 - docker run --rm --privileged multiarch/qemu-user-static:register --reset
 - docker build -t ansi/feelflight-11-3-interaction:latest .
 - docker login -u="$DOCKER_USER" -p="$DOCKER_PASS"
