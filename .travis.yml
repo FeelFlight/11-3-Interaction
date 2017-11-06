@@ -2,7 +2,11 @@ sudo: required
 services:
 - docker
 language: node_js
+before_script:
+  - npm install -g elm
 script:
+- cd frontend && elm-package install
+- elm make --output target/elm.js src/**.elm
 - docker run --rm --privileged multiarch/qemu-user-static:register --reset
 - docker build -t ansi/feelflight-11-3-interaction:latest .
 - docker login -u="$DOCKER_USER" -p="$DOCKER_PASS"
