@@ -1,4 +1,4 @@
-module HttpClient exposing (getAlarm, postAlarm)
+module HttpClient exposing (getAlarm, postAlarm, postHeating)
 
 import Http exposing (expectStringResponse)
 import Json.Decode as Decode exposing (Decoder,field,string,bool,list,int)
@@ -56,36 +56,31 @@ postAlarm {alarmSettings} =
     |> Http.send GetAlarmFromServer
 
 
--- getHeating : Model -> Cmd Msg
--- getHeating model =
---   Http.request
---     { method = "GET"
---     , headers = commonHeaders
---     , url = rootUrl ++ "heating"
---     , body = Http.emptyBody
---     , expect = Http.expectJson heatingDecoder
---     , timeout = Nothing
---     , withCredentials = False
---     }
---   |> Http.send GetHeatingFromServer
+postHeating : List Int -> Cmd Msg
+postHeating heaters =
+  let
+      heatersToEncode =
+        case heaters |> List.map Encode.int of
+          [ chest, hip, feet ] ->
+            [ ("chest", chest), ("hip", hip), ("feet", feet) ]
+          _ ->
+            []
+  in
+      Http.request
+        { method = "POST"
+        , headers = [(Http.header "Content-Type" "application/json")]
+        , url = rootUrl ++ "heating"
+        , body = (Http.jsonBody <| Encode.object heatersToEncode)
+        , expect = Http.expectJson heatingDecoder
+        , timeout = Nothing
+        , withCredentials = False
+        }
+    |> Http.send GetHeatingFromServer
 
 
 alarmDecoder : Decoder AlarmSettings
 alarmDecoder =
   Decode.map3 AlarmSettings (field "hour" string) (field "minute" string) (field "enabled" bool)
-
-
-postHeating : List Int -> Http.Request (List Int)
-postHeating heaters =
-  Http.request
-    { method = "POST"
-    , headers = [(Http.header "Content-Type" "application/json")]
-    , url = rootUrl ++ "heating"
-    , body = (Http.jsonBody <| Encode.object [("heating", (heaters |> List.map toString |> String.concat |> Encode.string)) ])
-    , expect = Http.expectJson heatingDecoder
-    , timeout = Nothing
-    , withCredentials = False
-    }
 
 
 heatingDecoder : Decoder (List Int)

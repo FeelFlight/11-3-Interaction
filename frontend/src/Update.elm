@@ -25,7 +25,7 @@ update action ({alarmSettings} as model) =
       let
           heaters = model.heaters |> replaceInList index newSetting
       in
-          ({ model | heaters = heaters }, Cmd.none)
+          ({ model | heaters = heaters }, HttpClient.postHeating heaters)
 
     GetAlarmFromServer (Ok alarmSettings) ->
       ({ model | alarmSettings = alarmSettings |> log "alarmSettings__", errorMsg = Nothing }, Cmd.none)
