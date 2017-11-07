@@ -66,4 +66,4 @@ class Alarm(threading.Thread):
 if __name__ == '__main__':
     print("Alarm started")
     a = Alarm()
-    time.sleep(12)
+    time.sleep(120000)

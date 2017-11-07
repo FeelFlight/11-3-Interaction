@@ -6,6 +6,7 @@ import couchdb
 from   flask            import Flask, jsonify, make_response, request, render_template
 from   flask_httpauth   import HTTPBasicAuth
 from   flask_cors       import CORS
+from   alarm            import Alarm
 import paho.mqtt.client as     mqtt
 
 app          = Flask(__name__)
@@ -135,20 +136,7 @@ if __name__ == '__main__':
     except Exception as e:
         local = localcouch.create('passenger')
 
+    a = Alarm()
+
     app.run(host="::", port=8036)
 
-
-
-"""
-    def _check_for_alarm(self):
-        if time.time() - self._update_alarm_time > 1:
-            db = self._couch['blanket']
-
-            for b in db:
-                blanket = db[b]
-                if "alarm" in blanket:
-                    if "hour" in blanket['alarm'] and "minute" in blanket['alarm'] and "enabled" in blanket['alarm'] and blanket['alarm']['enabled'] is True:
-                        print("ALARM found:%s" % b)
-
-            self._update_alarm_time = time.time()
-"""
